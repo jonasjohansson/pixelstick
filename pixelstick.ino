@@ -92,7 +92,10 @@ void playFile(String filename)
       bool buttonRight = !digitalRead(BTN_RIGHT);
 
       if (buttonRight)
-        stop();
+      {
+        closeFile();
+        break;
+      }
 
       if (i == pixels->numPixels())
       {
@@ -126,7 +129,6 @@ void closeFile()
   pixels->clear();
   pixels->show();
   delay(200);
-  break;
 }
 
 void nextFile(int dir)
@@ -185,8 +187,8 @@ void test()
 
 void setupSDcard()
 {
-  pinMode(BUILTIN_SDCARD, OUTPUT);
-  while (!SD.begin(BUILTIN_SDCARD))
+  pinMode(2, OUTPUT);
+  while (!SD.begin(2))
   {
     Serial.println("SD init failed!");
     delay(500);
