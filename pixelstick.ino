@@ -8,6 +8,7 @@
 #define BRIGHTNESS 255
 #define LED_PIN 2
 #define NUM_PIXELS 144
+#define BTN_GND 17
 #define BTN_UP 19
 #define BTN_DOWN 18
 #define BTN_LEFT 23
@@ -21,6 +22,7 @@ File dataFile;
 int filePos = 0;
 int numFiles = 0;
 
+bool useButtons = true;
 bool runAnimation = false;
 
 String fileNames[10];
@@ -29,14 +31,17 @@ String currentFilename = "";
 void setup()
 {
   Serial.begin(115200);
+  if (useButtons)
+  {
+    pinMode(BTN_GND, OUTPUT);
+    pinMode(BTN_UP, INPUT_PULLUP);
+    pinMode(BTN_DOWN, INPUT_PULLUP);
+    pinMode(BTN_LEFT, INPUT_PULLUP);
+    pinMode(BTN_RIGHT, INPUT_PULLUP);
+    digitalWrite(BTN_GND, LOW);
+  }
   pinMode(LED_BUILTIN, OUTPUT);
-  pinMode(17, OUTPUT);
-  pinMode(BTN_UP, INPUT_PULLUP);
-  pinMode(BTN_DOWN, INPUT_PULLUP);
-  pinMode(BTN_LEFT, INPUT_PULLUP);
-  pinMode(BTN_RIGHT, INPUT_PULLUP);
   digitalWrite(LED_BUILTIN, HIGH);
-  digitalWrite(17, LOW);
   pixels = new Adafruit_NeoPixel(NUM_PIXELS, LED_PIN, NEO_GRB + NEO_KHZ800);
   pixels->begin();
   pixels->setBrightness(BRIGHTNESS);
@@ -46,21 +51,28 @@ void setup()
 
 void loop()
 {
-  bool buttonUp = !digitalRead(BTN_UP);
-  bool buttonDown = !digitalRead(BTN_DOWN);
-  bool buttonLeft = !digitalRead(BTN_LEFT);
-  bool buttonRight = !digitalRead(BTN_RIGHT);
-
-  if (buttonUp || buttonDown)
+  if (useButtons)
   {
-    nextFile(buttonUp);
+    bool buttonUp = !digitalRead(BTN_UP);
+    bool buttonDown = !digitalRead(BTN_DOWN);
+    bool buttonLeft = !digitalRead(BTN_LEFT);
+    bool buttonRight = !digitalRead(BTN_RIGHT);
+    if (buttonUp || buttonDown)
+    {
+      nextFile(buttonUp);
+    }
+    else if (buttonLeft)
+    {
+      test();
+    }
+    else if (buttonRight)
+    {
+      playFile(fileNames[filePos]);
+    }
   }
-  else if (buttonLeft)
+  else
   {
-    test();
-  }
-  else if (buttonRight)
-  {
+    delay(5000);
     playFile(fileNames[filePos]);
   }
 }
@@ -113,6 +125,8 @@ void playFile(String filename)
       i++;
     }
     closeFile();
+    if (!useButtons)
+      nextFile(true);
   }
   else
   {
