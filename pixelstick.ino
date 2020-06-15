@@ -5,7 +5,7 @@
 #include <SD.h>
 
 #define DELAY 80
-#define BRIGHTNESS 255
+#define BRIGHTNESS 220
 #define LED_PIN 2
 #define NUM_PIXELS 144
 #define BTN_GND 17
@@ -47,6 +47,7 @@ void setup()
   pixels->setBrightness(BRIGHTNESS);
   setupSDcard();
   delay(1000);
+  showCurrentPosition();
 }
 
 void loop()
@@ -59,7 +60,8 @@ void loop()
     bool buttonRight = !digitalRead(BTN_RIGHT);
     if (buttonUp || buttonDown)
     {
-      nextFile(buttonUp);
+      int dir = (buttonUp) ? 1 : -1;
+      nextFile(dir);
     }
     else if (buttonLeft)
     {
