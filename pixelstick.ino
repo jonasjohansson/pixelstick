@@ -201,8 +201,8 @@ void test()
 
 void setupSDcard()
 {
-  pinMode(2, OUTPUT);
-  while (!SD.begin(2))
+  pinMode(BUILTIN_SDCARD, OUTPUT);
+  while (!SD.begin(BUILTIN_SDCARD))
   {
     Serial.println("SD init failed!");
     delay(500);
