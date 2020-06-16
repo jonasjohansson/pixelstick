@@ -60,7 +60,7 @@ void loop()
     bool buttonRight = !digitalRead(BTN_RIGHT);
     if (buttonUp || buttonDown)
     {
-      int dir = (buttonUp) ? 1 : -1;
+      int dir = (buttonUp) ? -1 : 1;
       nextFile(dir);
     }
     else if (buttonLeft)
