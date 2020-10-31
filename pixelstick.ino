@@ -1,3 +1,7 @@
+// Teensy 3.6
+// https://github.com/adafruit/Adafruit_NeoPixel/releases
+// https://github.com/emilv/ArduinoSort/releases
+
 #include <Adafruit_NeoPixel.h>
 #include <ArduinoSort.h>
 
@@ -97,8 +101,13 @@ void playFile(String filename)
     int i = 0;
     int r, g, b;
 
+    delay(3000);
+
+    pixels->clear();
+    pixels->show();
+
     // wait a bit after clicking go so there's time to find the right pose and place
-    delay(5000);
+    delay(2000);
 
     while (dataFile.available())
     {
