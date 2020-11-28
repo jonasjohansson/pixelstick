@@ -14,8 +14,7 @@ for filename in os.listdir('.'):
         text_file_name = "{}.txt".format(os.path.splitext(filename)[0])
         text_file = open(text_file_name, "w+")
         im = Image.open(filename)
-        # im = im.rotate(90,expand=True)
-        im = im.transpose(Image.FLIP_LEFT_RIGHT)
+        im = im.rotate(90,expand=True)
         im.save("test.png")
         pixels = list(im.getdata())
         for pixel in pixels:
